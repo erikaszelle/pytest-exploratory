@@ -270,10 +270,10 @@ def test_exists():
             items = [self.context_item]
             lastitem = self._dummy_item(self.context_item.parent)
         else:
-            items = self.context_node.collect()
+            items = [item for item in self.session.items if item.nodeid.startswith(self.context_node.nodeid)]
             lastitem = self.context_item
         for i, item in enumerate(items):
-            nextitem = items[i + 1] if i + 1 < len(items) else lastitem
+            nextitem = items[i + 1] if i + 1 < len(items) else lastitem  # is it needed at all, for sure? Can't we simply have 'None' as lastitem? 
             self.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
         self.config.hook.pytest_terminal_summary(
             terminalreporter=self.config.pluginmanager.get_plugin('terminalreporter'),
